@@ -16,12 +16,19 @@ CHIP DMux8Way {
     OUT a, b, c, d, e, f, g, h;
 
     PARTS:
-    DMux(in=in, sel=sel[2], a=dmux_a, b=dmux_b);
-    DMux(in=dmux_a, sel=sel[1], a=a, b=b);
-    DMux(in=dmux_b, sel=sel[1], a=c, b=d);
-    DMux(in=dmux_a, sel=sel[0], a=e, b=f);
-    DMux(in=dmux_b, sel=sel[0], a=g, b=h);
-    
+    // 第一层：使用sel[2]将输入分成两路
+    DMux(in=in, sel=sel[2], a=abcd, b=efgh);
+
+    // 第二层：使用sel[1]将上一层的两个输出各自再分成两路
+    DMux(in=abcd, sel=sel[1], a=ab, b=cd);
+    DMux(in=efgh, sel=sel[1], a=ef, b=gh);
+
+    // 第三层：使用sel[0]将上一层的四个输出各自再分成两路，得到最终的8个输出
+    DMux(in=ab, sel=sel[0], a=a, b=b);
+    DMux(in=cd, sel=sel[0], a=c, b=d);
+    DMux(in=ef, sel=sel[0], a=e, b=f);
+    DMux(in=gh, sel=sel[0], a=g, b=h);
+
     
     // Put your code here:
 }
