@@ -9,10 +9,18 @@
  *       b otherwise
  */
 
+// 这个实现满足了Mux的功能要求：
+
+// 当sel为0时，输出a的值
+// 当sel为1时，输出b的值
 CHIP Mux {
     IN a, b, sel;
     OUT out;
 
     PARTS:
+    Not(in=sel, out=notSel);
+    And(a=a, b=notSel, out=aAndNotSel);
+    And(a=b, b=sel, out=bAndSel);
+    Or(a=aAndNotSel, b=bAndSel, out=out);
     // Put your code here:
 }
