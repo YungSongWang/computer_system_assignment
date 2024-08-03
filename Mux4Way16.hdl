@@ -14,7 +14,12 @@
 CHIP Mux4Way16 {
     IN a[16], b[16], c[16], d[16], sel[2];
     OUT out[16];
-
     PARTS:
+        // 第一层：使用sel[0]选择a/b和c/d
+    Mux16(a=a, b=b, sel=sel[0], out=abMux);
+    Mux16(a=c, b=d, sel=sel[0], out=cdMux);
+
+    // 第二层：使用sel[1]从abMux和cdMux中选择最终输出
+    Mux16(a=abMux, b=cdMux, sel=sel[1], out=out);
     // Put your code here:
 }
